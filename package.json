@@ -8,7 +8,7 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
-    "start": "node --import=tsx src/RAG-basics.ts"
+    "start": "node --import=tsx src/RAG-neon.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "7.3.4",
