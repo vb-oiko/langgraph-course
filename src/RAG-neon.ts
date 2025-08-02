@@ -11,7 +11,6 @@ import { Pool } from "pg";
 import {
   BELLA_VISTA_COLUMNS,
   BELLA_VISTA_DOCS_TABLE,
-  connectionString,
   poolConfig,
   seedBellaVistaDocEmbeddings,
 } from "./utils/bella-vista";
