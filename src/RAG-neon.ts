@@ -7,6 +7,7 @@ import {
   RunnableSequence,
 } from "@langchain/core/runnables";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { Pool } from "pg";
 
 import "dotenv/config"; // loads .env at startup
 
@@ -57,21 +58,20 @@ async function main() {
     throw new Error("NEON_DATABASE_URL environment variable is required");
   }
 
-  // Parse the connection string to get connection options
-  const url = new URL(connectionString);
+  // Create connection pool
+  const pool = new Pool({
+    connectionString,
+    ssl: true,
+    max: 20, // Maximum number of connections in the pool
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  });
 
   const vectorStore = await PGVectorStore.fromDocuments(
     docs,
     embeddingFunction,
     {
-      postgresConnectionOptions: {
-        host: url.hostname,
-        port: Number(url.port) || 5432,
-        user: url.username,
-        password: url.password,
-        database: url.pathname.slice(1), // Remove leading slash
-        ssl: true,
-      },
+      pool,
       tableName: "bella_vista_docs",
       columns: {
         idColumnName: "id",
@@ -98,6 +98,9 @@ async function main() {
   const result = await qaChain.invoke("When are the opening hours?");
 
   console.log(result);
+  
+  // Close the pool when done
+  await pool.end();
 }
 
 main();
