@@ -8,7 +8,7 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
-    "start": "node --import=tsx src/tool-calling.ts"
+    "start": "node --import=tsx src/agent-basics.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "7.3.4",
