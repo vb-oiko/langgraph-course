@@ -8,7 +8,7 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
-    "start": "node --import=tsx src/agent-basics.ts"
+    "start": "node --import=tsx src/RAG-basics.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "7.3.4",
@@ -51,7 +51,9 @@
     },
     "onlyBuiltDependencies": [
       "esbuild",
-      "protobufjs"
+      "onnxruntime-node",
+      "protobufjs",
+      "sharp"
     ]
   }
 }
