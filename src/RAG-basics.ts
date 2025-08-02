@@ -1,8 +1,14 @@
 import { Document } from "@langchain/core/documents";
+import { StringOutputParser } from "@langchain/core/output_parsers";
+import { RunnablePassthrough, RunnableSequence } from "@langchain/core/runnables";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { ChatOpenAI } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 import "dotenv/config"; // loads .env at startup
+
+const embeddingFunction = new OpenAIEmbeddings();
 
 const docs: Document[] = [
   new Document({
@@ -27,25 +33,38 @@ const docs: Document[] = [
   }),
 ];
 
-// 2. Create embeddings
-const embeddings = new OpenAIEmbeddings();
+// RAG prompt template (equivalent to hub.pull("rlm/rag-prompt"))
+const prompt = ChatPromptTemplate.fromTemplate(`You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
 
-// 3. Create in-memory vector store
+Question: {question}
+
+Context: {context}
+
+Answer:`);
+
+function formatDocs(docs: Document[]): string {
+  return docs.map(doc => doc.pageContent).join("\n\n");
+}
 
 async function main() {
-  // Use MemoryVectorStore for reliable in-memory storage
-  const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
-
-  // Now you can run similarity search
-  const results = await vectorStore.similaritySearch(
-    "What are the hours on Sunday?",
-    2
-  );
-
-  for (const doc of results) {
-    console.log("Match:", doc.pageContent);
-    console.log("Metadata:", doc.metadata);
-  }
+  const db = await MemoryVectorStore.fromDocuments(docs, embeddingFunction);
+  
+  // retriever = db.as_retriever()
+  const retriever = db.asRetriever({ k: 2 });
+  
+  const qaChain = RunnableSequence.from([
+    {
+      context: retriever.pipe(formatDocs),
+      question: new RunnablePassthrough(),
+    },
+    prompt,
+    new ChatOpenAI(),
+    new StringOutputParser(),
+  ]);
+  
+  const result = await qaChain.invoke("When are the opening hours?");
+  
+  console.log(result);
 }
 
 main();
