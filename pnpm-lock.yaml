@@ -29,6 +29,9 @@ importers:
       dotenv:
         specifier: 17.2.0
         version: 17.2.0
+      langchain:
+        specifier: ^0.3.30
+        version: 0.3.30(@langchain/core@0.3.66(openai@5.11.0(ws@8.18.3)(zod@3.25.67)))(axios@1.11.0)(openai@5.11.0(ws@8.18.3)(zod@3.25.67))(ws@8.18.3)
       zod:
         specifier: 3.25.67
         version: 3.25.67
@@ -2502,7 +2505,7 @@ snapshots:
 
   '@types/node-fetch@2.6.13':
     dependencies:
-      '@types/node': 18.19.121
+      '@types/node': 24.1.0
       form-data: 4.0.4
 
   '@types/node@18.19.121':
@@ -2913,7 +2916,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.2
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.11.0(debug@4.4.1))
+      retry-axios: 2.6.0(axios@1.11.0)
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -3220,7 +3223,7 @@ snapshots:
 
   resolve-pkg-maps@1.0.0: {}
 
-  retry-axios@2.6.0(axios@1.11.0(debug@4.4.1)):
+  retry-axios@2.6.0(axios@1.11.0):
     dependencies:
       axios: 1.11.0(debug@4.4.1)
 

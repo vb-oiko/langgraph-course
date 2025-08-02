@@ -8,7 +8,7 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
-    "start": "node --import=tsx src/basic.ts"
+    "start": "node --import=tsx src/tool-calling.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "7.3.4",
@@ -17,6 +17,7 @@
     "@langchain/langgraph": "^0.4.2",
     "@langchain/openai": "^0.6.3",
     "dotenv": "17.2.0",
+    "langchain": "^0.3.30",
     "zod": "3.25.76"
   },
   "devDependencies": {
@@ -47,6 +48,10 @@
   "pnpm": {
     "overrides": {
       "zod": "3.25.67"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "protobufjs"
+    ]
   }
 }
