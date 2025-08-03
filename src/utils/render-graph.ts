@@ -1,7 +1,10 @@
 import { writeFile } from "node:fs/promises";
 import type { CompiledStateGraph } from "@langchain/langgraph";
 
-export async function renderGraph(runnable: CompiledStateGraph<any, any>) {
+export async function renderGraph(
+  runnable: CompiledStateGraph<any, any, any, any, any, any>,
+  filename = "graph"
+) {
   const graph = runnable.getGraph();
 
   // PNG as a Blob
@@ -14,6 +17,6 @@ export async function renderGraph(runnable: CompiledStateGraph<any, any>) {
   });
 
   const arrayBuffer = await png.arrayBuffer();
-  await writeFile("graph.png", Buffer.from(arrayBuffer));
-  console.log("Saved graph.png");
+  await writeFile(`${filename}.png`, Buffer.from(arrayBuffer));
+  console.log(`Saved ${filename}.png`);
 }
